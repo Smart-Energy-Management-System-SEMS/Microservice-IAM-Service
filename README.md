@@ -1,33 +1,37 @@
-# Microservice-IAM
+# SEMS IAM Service
 
-## Supabase Postgres configuration
+## Environment variables
+Use `.env.example` as base:
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `JWT_EXPIRATION_MINUTES`
+- `KAFKA_BOOTSTRAP_SERVERS`
+- `SERVER_PORT`
 
-This service expects database settings via environment variables. No secrets should be committed.
+## Database schema
+Run:
+- `src/main/resources/db/schema.sql`
 
-### Local development (.env)
+## Run locally
+1. Start Kafka and Zookeeper:
+   - `docker compose up -d zookeeper kafka`
+2. Configure Supabase credentials in env vars.
+3. Build and run:
+   - `./mvnw spring-boot:run`
 
-Create a `.env` file at the project root (same folder as `pom.xml`) with properties format:
+## Docker run
+- `docker compose up --build`
 
-```
-SUPABASE_DB_HOST=db.<your-project-ref>.supabase.co
-SUPABASE_DB_PORT=5432
-SUPABASE_DB_NAME=postgres
-SUPABASE_DB_USER=postgres
-SUPABASE_DB_PASSWORD=your-password
-SUPABASE_DB_SSLMODE=require
-```
+## API endpoints
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `GET /api/v1/users/me`
+- `GET /api/v1/users` (ADMIN)
+- `POST /api/v1/users/{userId}/roles` (ADMIN)
 
-The app loads `.env` automatically via `spring.config.import` in [src/main/resources/application.properties](src/main/resources/application.properties).
-
-### Production environment
-
-Set the same variables in your deployment environment (CI/CD, container, or app service). Example names:
-
-- `SUPABASE_DB_HOST`
-- `SUPABASE_DB_PORT`
-- `SUPABASE_DB_NAME`
-- `SUPABASE_DB_USER`
-- `SUPABASE_DB_PASSWORD`
-- `SUPABASE_DB_SSLMODE`
-
-You can also use the fallback names `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_SSLMODE` if preferred.
+## Kafka events
+- `iam.user.registered`
+- `iam.user.logged-in`
+- `iam.role.assigned`
