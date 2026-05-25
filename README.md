@@ -35,3 +35,17 @@ Run:
 - `iam.user.registered`
 - `iam.user.logged-in`
 - `iam.role.assigned`
+
+## Keep-alive script (Render)
+If your free Render instance goes to sleep, you can ping it periodically from another machine/service:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\keep-alive.ps1 `
+  -Url "https://your-render-service.onrender.com/" `
+  -IntervalSeconds 600
+```
+
+Notes:
+- Use a public endpoint that returns `200` (for example `/` or a health endpoint if you add one).
+- `600` seconds = ping every 10 minutes.
+- Keep this script running in a separate environment (not inside the same sleeping service).
