@@ -1,6 +1,6 @@
-package com.sems_iam.iam.infrastructure.authorization.sfs.services;
+package com.sems.iam.infrastructure.authorization.sfs.services;
 
-import com.sems_iam.iam.infrastructure.authorization.sfs.model.AuthenticatedUserDetails;
+import com.sems.iam.infrastructure.authorization.sfs.model.AuthenticatedUserDetails;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

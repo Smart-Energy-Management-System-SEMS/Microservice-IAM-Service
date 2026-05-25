@@ -1,7 +1,7 @@
-package com.sems_iam.iam.infrastructure.authorization.sfs.pipeline;
+package com.sems.iam.infrastructure.authorization.sfs.pipeline;
 
-import com.sems_iam.iam.infrastructure.authorization.sfs.services.SecurityUserFactory;
-import com.sems_iam.iam.infrastructure.tokens.jwt.services.JwtService;
+import com.sems.iam.infrastructure.authorization.sfs.services.SecurityUserFactory;
+import com.sems.iam.infrastructure.tokens.jwt.services.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

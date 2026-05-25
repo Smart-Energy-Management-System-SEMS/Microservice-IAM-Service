@@ -1,4 +1,4 @@
-package com.sems_iam.iam.infrastructure.persistence.jpa.repositories;
+package com.sems.iam.infrastructure.persistence.jpa.repositories;
 
 import java.util.List;
 import java.util.UUID;

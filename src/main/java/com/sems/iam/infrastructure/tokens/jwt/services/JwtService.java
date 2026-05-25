@@ -1,7 +1,7 @@
-package com.sems_iam.iam.infrastructure.tokens.jwt.services;
+package com.sems.iam.infrastructure.tokens.jwt.services;
 
-import com.sems_iam.iam.domain.model.aggregates.UserAggregate;
-import com.sems_iam.iam.domain.services.TokenService;
+import com.sems.iam.domain.model.aggregates.UserAggregate;
+import com.sems.iam.domain.services.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

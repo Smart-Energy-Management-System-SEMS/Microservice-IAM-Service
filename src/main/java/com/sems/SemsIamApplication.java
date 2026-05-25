@@ -1,4 +1,4 @@
-package com.sems_iam;
+package com.sems;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

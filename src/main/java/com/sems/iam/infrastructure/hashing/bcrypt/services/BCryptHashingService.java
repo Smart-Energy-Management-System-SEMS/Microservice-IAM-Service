@@ -1,6 +1,6 @@
-package com.sems_iam.iam.infrastructure.hashing.bcrypt.services;
+package com.sems.iam.infrastructure.hashing.bcrypt.services;
 
-import com.sems_iam.iam.domain.services.PasswordHashingService;
+import com.sems.iam.domain.services.PasswordHashingService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

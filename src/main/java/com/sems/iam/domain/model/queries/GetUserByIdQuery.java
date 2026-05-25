@@ -1,4 +1,4 @@
-package com.sems_iam.iam.domain.model.queries;
+package com.sems.iam.domain.model.queries;
 
 import java.util.UUID;
 

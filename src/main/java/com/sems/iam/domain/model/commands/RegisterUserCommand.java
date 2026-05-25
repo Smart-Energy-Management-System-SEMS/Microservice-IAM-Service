@@ -1,4 +1,4 @@
-package com.sems_iam.iam.domain.model.commands;
+package com.sems.iam.domain.model.commands;
 
 public record RegisterUserCommand(String emailAddress, String password, String role) {
 }

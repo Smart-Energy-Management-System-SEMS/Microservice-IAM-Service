@@ -1,4 +1,4 @@
-package com.sems_iam.iam.infrastructure.persistence.jpa.repositories;
+package com.sems.iam.infrastructure.persistence.jpa.repositories;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

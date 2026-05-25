@@ -1,7 +1,7 @@
-package com.sems_iam.iam.domain.model.aggregates;
+package com.sems.iam.domain.model.aggregates;
 
-import com.sems_iam.iam.domain.model.valueobjects.EmailAddress;
-import com.sems_iam.iam.domain.model.valueobjects.RoleName;
+import com.sems.iam.domain.model.valueobjects.EmailAddress;
+import com.sems.iam.domain.model.valueobjects.RoleName;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;

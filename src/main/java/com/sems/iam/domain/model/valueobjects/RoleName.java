@@ -1,4 +1,4 @@
-package com.sems_iam.iam.domain.model.valueobjects;
+package com.sems.iam.domain.model.valueobjects;
 
 public enum RoleName {
     ADMIN,

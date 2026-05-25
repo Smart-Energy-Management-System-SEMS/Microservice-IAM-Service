@@ -1,6 +1,6 @@
-package com.sems_iam.iam.domain.services;
+package com.sems.iam.domain.services;
 
-import com.sems_iam.iam.domain.model.aggregates.UserAggregate;
+import com.sems.iam.domain.model.aggregates.UserAggregate;
 
 public interface TokenService {
     String generateToken(UserAggregate userAggregate);

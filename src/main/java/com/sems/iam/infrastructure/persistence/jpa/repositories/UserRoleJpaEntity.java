@@ -1,4 +1,4 @@
-package com.sems_iam.iam.infrastructure.persistence.jpa.repositories;
+package com.sems.iam.infrastructure.persistence.jpa.repositories;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

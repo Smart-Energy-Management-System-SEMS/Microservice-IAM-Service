@@ -1,4 +1,4 @@
-package com.sems_iam.iam.domain.services;
+package com.sems.iam.domain.services;
 
 public interface PasswordHashingService {
     String hash(String rawPassword);

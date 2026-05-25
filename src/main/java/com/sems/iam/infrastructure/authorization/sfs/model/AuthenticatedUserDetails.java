@@ -1,4 +1,4 @@
-package com.sems_iam.iam.infrastructure.authorization.sfs.model;
+package com.sems.iam.infrastructure.authorization.sfs.model;
 
 import java.util.Collection;
 import java.util.UUID;

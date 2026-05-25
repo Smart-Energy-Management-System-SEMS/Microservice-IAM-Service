@@ -1,6 +1,6 @@
-package com.sems_iam.iam.infrastructure.authorization.sfs.configuration;
+package com.sems.iam.infrastructure.authorization.sfs.configuration;
 
-import com.sems_iam.iam.infrastructure.authorization.sfs.pipeline.JwtAuthenticationFilter;
+import com.sems.iam.infrastructure.authorization.sfs.pipeline.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
