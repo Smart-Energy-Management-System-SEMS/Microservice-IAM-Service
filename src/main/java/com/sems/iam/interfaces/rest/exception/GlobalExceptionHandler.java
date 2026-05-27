@@ -1,5 +1,8 @@
-package com.sems.shared.exception;
+package com.sems.iam.interfaces.rest.exception;
 
+import com.sems.iam.domain.model.exceptions.ConflictException;
+import com.sems.iam.domain.model.exceptions.NotFoundException;
+import com.sems.iam.domain.model.exceptions.UnauthorizedException;
 import java.time.Instant;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
