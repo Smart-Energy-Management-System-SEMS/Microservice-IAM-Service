@@ -7,7 +7,7 @@ import com.sems.iam.domain.model.valueobjects.*;
 import com.sems.iam.domain.services.*;
 import com.sems.iam.infrastructure.persistence.jpa.repositories.*;
 import com.sems.iam.interfaces.rest.resources.LoginResponse;
-import com.sems.iam.shared.exception.*;
+import com.sems.shared.exception.*;
 import java.time.Instant;
 import java.util.*;
 import lombok.RequiredArgsConstructor;

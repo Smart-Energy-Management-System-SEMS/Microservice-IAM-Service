@@ -1,4 +1,4 @@
-package com.sems.iam.infrastructure.authorization.sfs.configuration;
+package com.sems.iam.infrastructure.messaging.kafka.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,4 +11,5 @@ public class KafkaTopicsProperties {
     private String iamUserRegistered;
     private String iamUserLoggedIn;
     private String iamRoleAssigned;
+    private String iamRoleAssignmentRequested;
 }
