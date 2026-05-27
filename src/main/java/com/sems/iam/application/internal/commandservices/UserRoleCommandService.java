@@ -4,7 +4,7 @@ import com.sems.iam.application.internal.outboundservices.IamEventPublisher;
 import com.sems.iam.domain.model.commands.AssignRoleCommand;
 import com.sems.iam.domain.model.valueobjects.RoleName;
 import com.sems.iam.infrastructure.persistence.jpa.repositories.*;
-import com.sems.iam.shared.exception.NotFoundException;
+import com.sems.shared.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

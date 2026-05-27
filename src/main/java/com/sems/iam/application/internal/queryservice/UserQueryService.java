@@ -2,7 +2,7 @@ package com.sems.iam.application.internal.queryservice;
 
 import com.sems.iam.infrastructure.persistence.jpa.repositories.*;
 import com.sems.iam.interfaces.rest.resources.UserResource;
-import com.sems.iam.shared.exception.NotFoundException;
+import com.sems.shared.exception.NotFoundException;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

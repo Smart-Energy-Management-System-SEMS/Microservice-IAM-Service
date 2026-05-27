@@ -1,4 +1,4 @@
-package com.sems.iam.shared.exception;
+package com.sems.shared.exception;
 
 import java.time.Instant;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.sems.iam.shared.exception;
+package com.sems.shared.exception;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) { super(message); }
