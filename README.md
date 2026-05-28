@@ -12,6 +12,11 @@ Use `.env.example` as base:
 - `SERVER_PORT`
 - `GATEWAY_PORT`
 - `IAM_PORT`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `GOOGLE_REDIRECT_URI`
+- `GOOGLE_SCOPES`
+- `IAM_DEPLOY_URL`
 
 ## Database schema
 Run:
@@ -42,9 +47,13 @@ The IAM service is still exposed for direct debugging:
 ## API endpoints
 - `POST /api/v1/auth/register`
 - `POST /api/v1/auth/login`
+- `POST /api/v1/auth/google`
+- `GET /api/v1/auth/google/url`
+- `GET /api/v1/auth/google/callback`
 - `GET /api/v1/users/me`
 - `GET /api/v1/users` (ADMIN)
 - `POST /api/v1/users/{userId}/roles` (ADMIN)
+- `GET /actuator/health`
 
 ## Kafka events
 Published by IAM:
