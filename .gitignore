@@ -34,3 +34,5 @@ build/
 
 # Local environment secrets
 .env
+.env.local
+.env.*.local
