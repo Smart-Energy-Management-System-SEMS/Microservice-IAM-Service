@@ -27,6 +27,10 @@ Use `.env.example` as base:
 - `GOOGLE_SCOPES`
 - `IAM_DEPLOY_URL`
 
+Notes:
+- `.env` contains real secrets and is ignored by git.
+- `.env.example` contains placeholders and should be committed.
+
 ## Database schema
 Run:
 - `src/main/resources/db/schema.sql`
@@ -47,6 +51,11 @@ Optional local PLAINTEXT (only if you intentionally run local Kafka):
 
 ## Docker run
 - `docker compose up --build`
+
+Optional local Kafka (PLAINTEXT) with Docker Compose:
+- `docker compose --profile local-kafka up --build`
+- Set `KAFKA_SECURITY_PROTOCOL=PLAINTEXT`
+- Set `KAFKA_BOOTSTRAP_SERVERS=kafka:29092`
 
 With Docker Compose, the API Gateway is the public entry point:
 - `http://localhost:8081`
@@ -123,17 +132,49 @@ Role assignment request event payload:
 ## Kafka testing
 
 Connection test (Aiven metadata):
-- Use `kcat` or any Kafka client tool with SASL_SSL + SCRAM-SHA-256 and the CA cert.
+- Use `kcat` (or any Kafka client tool) with SASL_SSL + SCRAM-SHA-256 and the CA cert.
+
+Example with `kcat` (PowerShell):
+```powershell
+$ca = $env:KAFKA_SSL_CA_CERT -replace '\n', "`n"
+$ca | Set-Content -NoNewline aiven-ca.pem
+kcat -L -b $env:KAFKA_BOOTSTRAP_SERVERS `
+  -X security.protocol=$env:KAFKA_SECURITY_PROTOCOL `
+  -X sasl.mechanism=$env:KAFKA_SASL_MECHANISM `
+  -X sasl.username=$env:KAFKA_USERNAME `
+  -X sasl.password=$env:KAFKA_PASSWORD `
+  -X ssl.ca.location=aiven-ca.pem
+```
 
 Producer test (IAM publishes events):
 1. Start the service.
 2. Call `POST /api/v1/auth/register`.
 3. Verify a message in `iam.user.registered`.
 
+Example `kcat` consumer:
+```powershell
+kcat -C -b $env:KAFKA_BOOTSTRAP_SERVERS -t iam.user.registered `
+  -X security.protocol=$env:KAFKA_SECURITY_PROTOCOL `
+  -X sasl.mechanism=$env:KAFKA_SASL_MECHANISM `
+  -X sasl.username=$env:KAFKA_USERNAME `
+  -X sasl.password=$env:KAFKA_PASSWORD `
+  -X ssl.ca.location=aiven-ca.pem
+```
+
 Consumer test (IAM consumes role assignment requests):
 1. Start the service.
 2. Produce a message to `iam.role-assignment.requested` with a valid `userId`.
 3. Verify the role assignment in your DB or logs.
+
+Example `kcat` producer:
+```powershell
+@'{"userId":"00000000-0000-0000-0000-000000000000","role":"ADMIN"}'@ | kcat -P -b $env:KAFKA_BOOTSTRAP_SERVERS -t iam.role-assignment.requested `
+  -X security.protocol=$env:KAFKA_SECURITY_PROTOCOL `
+  -X sasl.mechanism=$env:KAFKA_SASL_MECHANISM `
+  -X sasl.username=$env:KAFKA_USERNAME `
+  -X sasl.password=$env:KAFKA_PASSWORD `
+  -X ssl.ca.location=aiven-ca.pem
+```
 
 ## API Gateway routes
 - `POST /api/v1/auth/register` -> `iam-service`
