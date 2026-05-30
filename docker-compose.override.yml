@@ -1,0 +1,7 @@
+services:
+  iam-service:
+    environment:
+      # Local override when running IAM outside compose is localhost:9092.
+      # Inside compose, kafka must be resolved by service DNS.
+      KAFKA_BROKERS: ${KAFKA_BROKERS_DOCKER:-kafka:9092}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKERS_DOCKER:-kafka:9092}
