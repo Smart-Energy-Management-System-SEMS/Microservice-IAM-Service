@@ -13,17 +13,34 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * JwtService is the infrastructure "adapter" that implements the TokenService
+ * port using JSON Web Tokens (JWT). A JWT is a signed, self-contained token: it
+ * carries data ("claims") and a signature, so anyone with the secret key can
+ * verify it was issued by us and was not modified. Because the domain talks to
+ * the TokenService interface, the rest of the app does not know (or care) that
+ * JWT is the technology behind it.
+ */
 @Service
 public class JwtService implements TokenService {
-    private final Key key;
-    private final long expirationMinutes;
+    private final Key key;               // the secret signing key
+    private final long expirationMinutes; // how long a token stays valid
 
+    // The constructor receives configuration values via @Value. The secret
+    // string is turned into a cryptographic HMAC key. Keeping the secret in
+    // configuration (not in code) is important so it can differ per environment
+    // and never be committed to source control.
     public JwtService(@Value("${security.jwt.secret}") String secret,
                       @Value("${security.jwt.expiration-minutes}") long expirationMinutes) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMinutes = expirationMinutes;
     }
 
+    /**
+     * Builds and signs a token for the user. We put the userId, email and roles
+     * inside as claims, set when it was issued and when it expires, and finally
+     * sign it. compact() serialises everything into the final token string.
+     */
     @Override
     public String generateToken(UserAggregate userAggregate) {
         Instant now = Instant.now();
@@ -37,11 +54,17 @@ public class JwtService implements TokenService {
                 .compact();
     }
 
+    /** Convenience method to read just the userId claim out of a token. */
     @Override
     public String extractUserId(String token) {
         return extractAllClaims(token).get("userId", String.class);
     }
 
+    /**
+     * Checks a token by trying to parse it. If the signature is wrong or the
+     * token is expired, the parser throws and we return false. Catching a broad
+     * Exception here is acceptable because ANY parsing problem means "invalid".
+     */
     @Override
     public boolean isTokenValid(String token) {
         try {
@@ -52,6 +75,11 @@ public class JwtService implements TokenService {
         }
     }
 
+    /**
+     * Parses the token, verifying the signature with our key, and returns all
+     * its claims. This will throw if the token is not authentic, which is why
+     * the methods above rely on it.
+     */
     public Claims extractAllClaims(String token) {
         return Jwts.parser().verifyWith((javax.crypto.SecretKey) key).build().parseSignedClaims(token).getPayload();
     }

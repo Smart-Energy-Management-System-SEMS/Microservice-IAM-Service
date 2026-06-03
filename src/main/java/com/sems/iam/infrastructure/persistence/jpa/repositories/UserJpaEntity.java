@@ -10,19 +10,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * UserJpaEntity is the PERSISTENCE model: it maps a Java object to a row in the
+ * database "users" table using JPA/Hibernate. We deliberately keep it separate
+ * from the domain's UserAggregate. The domain class focuses on business rules;
+ * this class focuses on how data is stored. Mixing them would tie our business
+ * logic to the database, so we keep two shapes and translate between them.
+ *
+ * Annotations:
+ *  - @Entity + @Table tell JPA this class is a table named "users".
+ *  - @Getter/@Setter/@NoArgsConstructor are Lombok: they generate the getters,
+ *    setters and the empty constructor that JPA requires.
+ */
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserJpaEntity {
+    // @Id marks the primary key column. @Column maps each field to a DB column
+    // and adds constraints that the database will enforce.
     @Id
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    // unique = true creates a UNIQUE constraint, so the database itself prevents
+    // two users with the same email even if the application check is bypassed.
     @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
 
+    // We store only the hashed password (nullable = false means it is required).
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
