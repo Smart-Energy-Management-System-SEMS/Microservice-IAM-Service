@@ -24,7 +24,7 @@ public class SecurityConfiguration {
     @Value("${app.security.auth-required:true}")
     private boolean authRequired;
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
+    @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
 
     @Bean
