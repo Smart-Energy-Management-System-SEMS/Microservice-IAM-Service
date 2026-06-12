@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -24,10 +23,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * authorization machinery.
  */
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final SecurityUserFactory securityUserFactory;
+
+    public JwtAuthenticationFilter(JwtService jwtService, SecurityUserFactory securityUserFactory) {
+        this.jwtService = jwtService;
+        this.securityUserFactory = securityUserFactory;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -56,7 +59,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Claims claims = jwtService.extractAllClaims(token);
         UUID userId = UUID.fromString(claims.get("userId", String.class));
         String email = claims.get("email", String.class);
-        List<String> roles = claims.get("roles", List.class);
+        List<String> roles = claims.get("roles", List.class)
+                .stream()
+                .map(String::valueOf)
+                .toList();
         // ...build a Spring Security "principal" (the logged-in user) and an
         // Authentication object. The null is the credentials (password), which
         // we do not need because the token already proved the identity.

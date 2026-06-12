@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +23,18 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 public class AuthenticationController {
     // The controller depends on the application service (to do the work) and the
     // mapper (to turn request DTOs into domain commands).
     private final AuthenticationCommandService authenticationCommandService;
     private final CommandMapper commandMapper;
+
+    public AuthenticationController(
+            AuthenticationCommandService authenticationCommandService,
+            CommandMapper commandMapper) {
+        this.authenticationCommandService = authenticationCommandService;
+        this.commandMapper = commandMapper;
+    }
 
     @Value("${security.oauth2.google.client-id:}")
     private String googleClientId;

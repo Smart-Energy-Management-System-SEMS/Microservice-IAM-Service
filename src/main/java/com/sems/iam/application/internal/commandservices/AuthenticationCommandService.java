@@ -12,7 +12,6 @@ import com.sems.iam.infrastructure.persistence.jpa.repositories.*;
 import com.sems.iam.interfaces.rest.resources.LoginResponse;
 import java.time.Instant;
 import java.util.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * Spring annotations:
  *  - @Service marks it as a Spring-managed bean so it can be injected elsewhere.
- *  - @RequiredArgsConstructor (Lombok) generates a constructor with all the
- *    'final' fields, which is how the dependencies below get injected.
+ *  - Constructor injection wires the 'final' dependencies below.
  */
 @Service
-@RequiredArgsConstructor
 public class AuthenticationCommandService {
     // All collaborators are 'final' and injected through the constructor. Note
     // that several are interfaces (PasswordHashingService, TokenService,
@@ -44,6 +41,25 @@ public class AuthenticationCommandService {
     private final IamEventPublisher eventPublisher;
     private final GoogleTokenVerifier googleTokenVerifier;
     private final GoogleOAuthClient googleOAuthClient;
+
+    public AuthenticationCommandService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            UserRoleRepository userRoleRepository,
+            PasswordHashingService passwordHashingService,
+            TokenService tokenService,
+            IamEventPublisher eventPublisher,
+            GoogleTokenVerifier googleTokenVerifier,
+            GoogleOAuthClient googleOAuthClient) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.passwordHashingService = passwordHashingService;
+        this.tokenService = tokenService;
+        this.eventPublisher = eventPublisher;
+        this.googleTokenVerifier = googleTokenVerifier;
+        this.googleOAuthClient = googleOAuthClient;
+    }
 
     // @Value injects a setting from configuration. The ":" with nothing after it
     // means the default is an empty string when the property is not set.

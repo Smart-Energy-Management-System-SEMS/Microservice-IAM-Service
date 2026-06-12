@@ -2,7 +2,6 @@ package com.sems.iam.infrastructure.authorization.sfs.configuration;
 
 import com.sems.iam.infrastructure.authorization.sfs.pipeline.JwtAuthenticationFilter;
 import java.util.Arrays;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Value("${app.security.auth-required:true}")
@@ -26,6 +24,10 @@ public class SecurityConfiguration {
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
+
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

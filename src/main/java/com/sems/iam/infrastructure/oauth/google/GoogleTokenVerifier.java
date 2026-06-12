@@ -1,13 +1,11 @@
 package com.sems.iam.infrastructure.oauth.google;
 
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 @Component
-@RequiredArgsConstructor
 public class GoogleTokenVerifier {
     private final RestClient restClient = RestClient.builder()
             .baseUrl("https://oauth2.googleapis.com")
