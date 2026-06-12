@@ -40,6 +40,11 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/health").permitAll();
                     auth.requestMatchers("/actuator/health", "/actuator/health/**").permitAll();
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html")
+                        .permitAll();
                     if (authRequired) {
                         auth.anyRequest().authenticated();
                     } else {
