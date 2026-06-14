@@ -8,8 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "topics")
 public class KafkaTopicsProperties {
-    private String iamUserRegistered;
-    private String iamUserLoggedIn;
-    private String iamRoleAssigned;
-    private String iamRoleAssignmentRequested;
+    private String iamEvents;
 }

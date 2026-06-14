@@ -144,10 +144,7 @@ public class ConfigServiceEnvironmentPostProcessor implements EnvironmentPostPro
         map.put("spring.kafka.properties.sasl.jaas.config", List.of("KAFKA_SASL_JAAS_CONFIG"));
         map.put("spring.kafka.properties.ssl.truststore.type", List.of("KAFKA_SSL_TRUSTSTORE_TYPE"));
         map.put("spring.kafka.properties.ssl.truststore.certificates", List.of("KAFKA_SSL_CA_CERT"));
-        map.put("topics.iam-user-registered", List.of("TOPIC_IAM_USER_REGISTERED"));
-        map.put("topics.iam-user-logged-in", List.of("TOPIC_IAM_USER_LOGGED_IN"));
-        map.put("topics.iam-role-assigned", List.of("TOPIC_IAM_ROLE_ASSIGNED"));
-        map.put("topics.iam-role-assignment-requested", List.of("TOPIC_IAM_ROLE_ASSIGNMENT_REQUESTED"));
+        map.put("topics.iam-events", List.of("TOPIC_IAM_EVENTS"));
         map.put("security.oauth2.google.client-id", List.of("GOOGLE_CLIENT_ID"));
         map.put("security.oauth2.google.client-secret", List.of("GOOGLE_CLIENT_SECRET"));
         map.put("security.oauth2.google.redirect-uri", List.of("GOOGLE_REDIRECT_URI"));

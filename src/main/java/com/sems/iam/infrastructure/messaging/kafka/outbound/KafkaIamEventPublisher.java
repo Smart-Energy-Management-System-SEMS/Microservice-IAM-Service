@@ -3,52 +3,57 @@ package com.sems.iam.infrastructure.messaging.kafka.outbound;
 import com.sems.iam.application.internal.outboundservices.IamEventPublisher;
 import com.sems.iam.infrastructure.messaging.kafka.configuration.KafkaTopicsProperties;
 import java.time.Instant;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "app.kafka.enabled", havingValue = "true", matchIfMissing = true)
 public class KafkaIamEventPublisher implements IamEventPublisher {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final KafkaTopicsProperties topics;
 
     public void publishUserRegistered(String userId, String emailAddress, String role) {
-        publish(topics.getIamUserRegistered(), userId, Map.of(
-                "eventType", "iam.user.registered",
+        publish(userId, "iam.user.registered", Map.of(
                 "userId", userId,
                 "emailAddress", emailAddress,
-                "role", role,
-                "occurredAt", Instant.now().toString()));
+                "role", role));
     }
 
     public void publishUserLoggedIn(String userId, String emailAddress) {
-        publish(topics.getIamUserLoggedIn(), userId, Map.of(
-                "eventType", "iam.user.logged-in",
+        publish(userId, "iam.user.logged-in", Map.of(
                 "userId", userId,
-                "emailAddress", emailAddress,
-                "occurredAt", Instant.now().toString()));
+                "emailAddress", emailAddress));
     }
 
     public void publishRoleAssigned(String userId, String role) {
-        publish(topics.getIamRoleAssigned(), userId, Map.of(
-                "eventType", "iam.role.assigned",
+        publish(userId, "iam.role.assigned", Map.of(
                 "userId", userId,
-                "role", role,
-                "occurredAt", Instant.now().toString()));
+                "role", role));
     }
 
-    private void publish(String topic, String key, Map<String, Object> payload) {
-        kafkaTemplate.send(topic, key, payload)
+    private void publish(String key, String eventType, Map<String, Object> data) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventType", eventType);
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("occurredAt", Instant.now().toString());
+        payload.put("data", data);
+
+        kafkaTemplate.send(topics.getIamEvents(), key, payload)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
-                        log.error("Could not publish IAM event to topic {} with key {}", topic, key, ex);
+                        log.error("Could not publish IAM event {} to topic {} with key {}", eventType, topics.getIamEvents(), key, ex);
                     } else {
-                        log.info("Published IAM event to topic {} partition {} offset {}",
-                                topic,
+                        log.info("Published IAM event {} to topic {} partition {} offset {}",
+                                eventType,
+                                topics.getIamEvents(),
                                 result.getRecordMetadata().partition(),
                                 result.getRecordMetadata().offset());
                     }
