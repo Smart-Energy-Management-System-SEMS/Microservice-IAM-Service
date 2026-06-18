@@ -48,10 +48,7 @@ services:
       KAFKA_SASL_MECHANISM: ${KAFKA_SASL_MECHANISM}
       KAFKA_SSL_CA_CERT: ${KAFKA_SSL_CA_CERT}
       KAFKA_CONSUMER_GROUP_ID: ${KAFKA_CONSUMER_GROUP_ID:-iam-service}
-      TOPIC_IAM_USER_REGISTERED: ${TOPIC_IAM_USER_REGISTERED:-iam.user.registered}
-      TOPIC_IAM_USER_LOGGED_IN: ${TOPIC_IAM_USER_LOGGED_IN:-iam.user.logged-in}
-      TOPIC_IAM_ROLE_ASSIGNED: ${TOPIC_IAM_ROLE_ASSIGNED:-iam.role.assigned}
-      TOPIC_IAM_ROLE_ASSIGNMENT_REQUESTED: ${TOPIC_IAM_ROLE_ASSIGNMENT_REQUESTED:-iam.role-assignment.requested}
+      TOPIC_IAM_EVENTS: ${TOPIC_IAM_EVENTS:-iam.events}
   api-gateway:
     image: nginx:1.27-alpine
     ports:

@@ -1,20 +1,21 @@
 # SEMS IAM Service
 
-Servicio IAM de SEMS en Java/Spring Boot, preparado para ejecución local y despliegue en Azure Container Apps.
+Servicio IAM de SEMS en Java/Spring Boot, preparado para ejecucion local y despliegue en Azure Container Apps.
 
 ## Endpoints de salud
 - `GET /health`
 - `GET /actuator/health`
 
 ## Variables de entorno
-Mínimas para contenedor:
-- `PORT=8080` (Azure Container Apps la inyecta automáticamente)
+Minimas para contenedor:
+- `PORT=8080` (Azure Container Apps la inyecta automaticamente)
 - `JWT_SECRET`
 - `DATABASE_URL` (o `DB_URL`)
 
 Opcionales/recomendadas:
 - `CONFIG_SERVICE_URL`
 - `KAFKA_BROKERS` (alias compatible: `KAFKA_BOOTSTRAP_SERVERS`)
+- `TOPIC_IAM_EVENTS` (default: `iam.events`)
 - `KAFKA_SECURITY_PROTOCOL`
 - `KAFKA_SASL_MECHANISM`
 - `KAFKA_USERNAME`
@@ -26,11 +27,34 @@ Compatibilidad local existente (no removida):
 - `DB_USERNAME`, `DB_PASSWORD`
 - `API_GATEWAY_AUTH_REQUIRED`, `CORS_ALLOWED_ORIGINS`, `GOOGLE_*`, `IAM_DEPLOY_URL`
 
-## Configuración de puerto
+## Configuracion de puerto
 La app usa:
 - `server.port=${SERVER_PORT:${PORT:8080}}`
 
 Esto mantiene local (`SERVER_PORT`) y Azure (`PORT`) sin hardcodear `localhost` para runtime cloud.
+
+## Eventos Kafka
+Contrato operativo actual:
+- Topic fisico agrupado: `iam.events`
+- `eventType` viaja dentro del payload
+- Un mismo topic puede transportar varios `eventType`
+
+Envelope aplicado por IAM:
+```json
+{
+  "eventType": "iam.user.registered",
+  "eventId": "uuid",
+  "occurredAt": "2026-06-17T00:00:00Z",
+  "data": {
+    "userId": "uuid",
+    "emailAddress": "user@example.com",
+    "role": "ADMIN"
+  }
+}
+```
+
+Nota historica:
+- Referencias como `TOPIC_IAM_USER_REGISTERED`, `TOPIC_IAM_USER_LOGGED_IN`, `TOPIC_IAM_ROLE_ASSIGNED` o `TOPIC_IAM_ROLE_ASSIGNMENT_REQUESTED` se consideran legado documental y no deben reintroducirse como configuracion activa de runtime.
 
 ## Ejecutar local
 1. Copiar variables:
@@ -73,4 +97,4 @@ az containerapp create \
 Este repositorio es IAM. Se incluyen en `.env.example` variables de rutas de gateway para estandarizar despliegues SEMS:
 - `IAM_SERVICE_URL`, `DEVICE_MANAGEMENT_SERVICE_URL`, `ALERT_SERVICE_URL`, `SUBSCRIPTIONS_SERVICE_URL`, `PAYMENTS_SERVICE_URL`, `ANALYTICS_SERVICE_URL`, `ENERGY_MONITORING_SERVICE_URL`
 
-IAM no depende de esas variables para su lógica actual.
+IAM no depende de esas variables para su logica actual.
