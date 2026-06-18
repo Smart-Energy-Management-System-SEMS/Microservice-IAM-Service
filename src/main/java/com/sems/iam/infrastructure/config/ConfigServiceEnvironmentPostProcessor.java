@@ -141,10 +141,18 @@ public class ConfigServiceEnvironmentPostProcessor implements EnvironmentPostPro
         map.put("spring.kafka.consumer.group-id", List.of("KAFKA_CONSUMER_GROUP_ID"));
         map.put("spring.kafka.properties.security.protocol", List.of("KAFKA_SECURITY_PROTOCOL"));
         map.put("spring.kafka.properties.sasl.mechanism", List.of("KAFKA_SASL_MECHANISM"));
-        map.put("spring.kafka.properties.sasl.jaas.config", List.of("KAFKA_SASL_JAAS_CONFIG"));
+        map.put(
+                "spring.kafka.properties.sasl.jaas.config",
+                List.of(
+                        "KAFKA_SASL_JAAS_CONFIG",
+                        "KAFKA_SASL_LOGIN_MODULE",
+                        "KAFKA_SASL_USERNAME",
+                        "KAFKA_SASL_PASSWORD",
+                        "KAFKA_USERNAME",
+                        "KAFKA_PASSWORD"));
         map.put("spring.kafka.properties.ssl.truststore.type", List.of("KAFKA_SSL_TRUSTSTORE_TYPE"));
         map.put("spring.kafka.properties.ssl.truststore.certificates", List.of("KAFKA_SSL_CA_CERT"));
-        map.put("topics.iam-events", List.of("TOPIC_IAM_EVENTS"));
+        map.put("topics.iam-events", List.of("TOPIC_IAM_EVENTS", "KAFKA_TOPIC_IAM_EVENTS"));
         map.put("security.oauth2.google.client-id", List.of("GOOGLE_CLIENT_ID"));
         map.put("security.oauth2.google.client-secret", List.of("GOOGLE_CLIENT_SECRET"));
         map.put("security.oauth2.google.redirect-uri", List.of("GOOGLE_REDIRECT_URI"));
