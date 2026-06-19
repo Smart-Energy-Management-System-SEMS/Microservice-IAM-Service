@@ -13,6 +13,20 @@ import java.util.regex.Pattern;
  * its own type (instead of passing a raw String around) means the email can
  * NEVER exist in an invalid form: if you hold an EmailAddress, it is guaranteed
  * to be valid.
+
+/**
+ * Objeto de Valor que representa una dirección de correo electrónico.
+ * 
+ * EmailAddress es un record de Java que encapsula la lógica de validación
+ * y normalización de direcciones de correo electrónico dentro del dominio IAM.
+ * 
+ * Esta clase implementa el patrón Value Object del Domain-Driven Design (DDD),
+ * asegurando que solo se pueden crear instancias válidas de EmailAddress.
+ * 
+ * @author SEMS IAM Service
+ * @version 1.0
+ * @since 1.0
+
  */
 public record EmailAddress(String value) {
     // A compiled regular expression used to check the basic email shape. It is
