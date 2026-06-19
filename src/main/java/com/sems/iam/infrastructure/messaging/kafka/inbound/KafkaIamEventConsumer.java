@@ -6,20 +6,29 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "app.kafka.enabled", havingValue = "true", matchIfMissing = true)
 public class KafkaIamEventConsumer {
     private final UserRoleCommandService userRoleCommandService;
 
-    @KafkaListener(topics = "${topics.iam-role-assignment-requested}")
+    @KafkaListener(topics = "${topics.iam-events}")
     public void onRoleAssignmentRequested(Map<String, Object> event) {
         try {
-            UUID userId = UUID.fromString(required(event, "userId"));
-            String role = required(event, "role");
+            String eventType = required(event, "eventType");
+            if (!"iam.role-assignment.requested".equals(eventType)) {
+                log.debug("Ignoring IAM event type {}", eventType);
+                return;
+            }
+
+            Map<String, Object> data = requiredMap(event, "data");
+            UUID userId = UUID.fromString(required(data, "userId"));
+            String role = required(data, "role");
             userRoleCommandService.assignRole(new AssignRoleCommand(userId, role));
             log.info("Consumed IAM role assignment request for user {} and role {}", userId, role);
         } catch (RuntimeException ex) {
@@ -34,5 +43,14 @@ public class KafkaIamEventConsumer {
             throw new IllegalArgumentException("Missing Kafka event field: " + key);
         }
         return value.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> requiredMap(Map<String, Object> event, String key) {
+        Object value = event.get(key);
+        if (value instanceof Map<?, ?> nested) {
+            return (Map<String, Object>) nested;
+        }
+        throw new IllegalArgumentException("Missing Kafka event object: " + key);
     }
 }
