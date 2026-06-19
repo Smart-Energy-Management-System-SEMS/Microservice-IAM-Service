@@ -46,6 +46,7 @@ public class ConfigServiceEnvironmentPostProcessor implements EnvironmentPostPro
             fetchAndMerge(client, endpoint, timeoutMs, overrides);
         }
 
+        sanitizeKafkaSslOverrides(overrides);
         overrides.entrySet().removeIf(entry -> hasExplicitEnvironmentOverride(entry.getKey()));
 
         if (!overrides.isEmpty()) {
@@ -94,9 +95,43 @@ public class ConfigServiceEnvironmentPostProcessor implements EnvironmentPostPro
             if (value instanceof Map<?, ?> nested) {
                 flattenAndCollect(key, (Map<String, Object>) nested, target);
             } else if (value != null && isSupportedKey(key)) {
-                target.put(key, value.toString());
+                String normalizedValue = value.toString().trim();
+                if (StringUtils.hasText(normalizedValue)) {
+                    target.put(key, normalizedValue);
+                }
             }
         }
+    }
+
+    static void sanitizeKafkaSslOverrides(Map<String, Object> overrides) {
+        String truststoreTypeKey = "spring.kafka.properties.ssl.truststore.type";
+        String certificatesKey = "spring.kafka.properties.ssl.truststore.certificates";
+
+        String truststoreType = normalizeOverrideValue(overrides.get(truststoreTypeKey));
+        String certificates = normalizeOverrideValue(overrides.get(certificatesKey));
+
+        if (!StringUtils.hasText(truststoreType) || !StringUtils.hasText(certificates)) {
+            overrides.remove(truststoreTypeKey);
+            overrides.remove(certificatesKey);
+            return;
+        }
+
+        if ("PEM".equalsIgnoreCase(truststoreType) && !looksLikePem(certificates)) {
+            overrides.remove(truststoreTypeKey);
+            overrides.remove(certificatesKey);
+        }
+    }
+
+    private static String normalizeOverrideValue(Object value) {
+        if (value == null) {
+            return null;
+        }
+        String normalized = value.toString().trim();
+        return StringUtils.hasText(normalized) ? normalized : null;
+    }
+
+    private static boolean looksLikePem(String value) {
+        return value.contains("-----BEGIN CERTIFICATE-----") && value.contains("-----END CERTIFICATE-----");
     }
 
     private boolean isSupportedKey(String key) {
