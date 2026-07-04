@@ -44,7 +44,9 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
                     auth.requestMatchers(
                             "/swagger-ui/**",
+                            "/webjars/**",
                             "/v3/api-docs/**",
+                            "/v3/api-docs",
                             "/swagger-ui.html")
                         .permitAll();
                     if (authRequired) {
